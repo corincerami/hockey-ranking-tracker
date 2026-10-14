@@ -1,0 +1,17 @@
+- last ||= false
+- scope_name = rank_finder.scope ? rank_finder.scope.class.name : 'All-Time'
+- if rank_finder.current_rank.value.zero?
+    %span= "Still waiting for their first #{scope_name} #{rank_finder.category.singularize.capitalize}"
+    - unless last
+        %hr
+- elsif rank_finder.next_ranks.any?
+    %div{style: "margin-bottom: 5px;"}= "#{rank_finder.current_rank.value} #{scope_name} #{rank_finder.category.capitalize} (#{rank_finder.current_rank.rank.ordinalize})"
+    %div
+        %span= "#{rank_finder.to_next_rank} more to reach #{rank_finder.next_ranks.first.rank.ordinalize}"
+        %span
+            %button{popovertarget: "other-players-#{rank_finder.player.id}", class: 'popover-button'}
+                = image_tag "info.png", width: 20, class: 'icon'
+    - other_players = rank_finder.players_at_next_rank.map(&:name)
+    %p{id: "other-players-#{rank_finder.player.id}", class: 'popover', popover: 'hint'}= "#{rank_finder.next_ranks.first.rank.ordinalize} currently held by #{other_players.join(', ')}"
+    - unless last
+        %hr

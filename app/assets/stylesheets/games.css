@@ -1,0 +1,124 @@
+body {
+    background-color: #2a2c36;
+    color: white;
+}
+
+a {
+    color: white;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.align-middle {
+    vertical-align: middle;
+}
+
+header {
+    border-bottom: 2px solid white;
+}
+
+.player-card {
+    border: 2px solid black;
+    border-radius: 10px;
+    background-size: cover;
+    color: black;
+    font-weight: bold;
+    margin: 20px;
+    padding-bottom: 10px;
+}
+
+.grid {
+    display: grid;
+}
+
+.grid-equal {
+    grid-template-columns: 1fr 1fr;
+}
+
+.grid-2-1 {
+    grid-template-columns: 2fr 1fr;
+}
+
+.side-by-side-container {
+    grid-template-columns: 1fr 1fr;
+}
+
+.side-by-side-container .game {
+    padding: 20px;
+    margin: 10%;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.flex-75-md {
+    @media (min-width: 1000px) {
+        flex: 70%
+    }
+}
+
+.flex-25-md {
+    @media (min-width: 1000px) {
+        flex: 30%
+    }
+}
+
+.popover {
+    position-area: bottom;
+    max-width: 80%;
+}
+
+.popover-button {
+    background: none;
+    border: none;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.highlight {
+    background-color: #962117;
+    border-radius: 5px;
+    color: white;
+}
+
+.highlight .icon {
+    filter: invert(100%);
+}
+
+.player-rank-row {
+    padding: 5px;
+}
+
+hr {
+    color: #c4252b;
+}
+
+table {
+    border-collapse: collapse;
+    margin: auto;
+}
+
+td, th {
+    border: 2px solid #c4252b;
+}
+
+.no-border-right {
+    border-right: none;
+}
+
+.no-border-left {
+    border-left: none;
+}
+
+.no-border-top {
+    border-top: none;
+}
+
+.no-border-bottom {
+    border-bottom: none;
+}

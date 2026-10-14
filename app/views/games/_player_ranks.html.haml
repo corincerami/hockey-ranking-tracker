@@ -1,0 +1,30 @@
+%div.player-card{style: "flex-grow: 1; background-image: url(#{image_url('ice.jpg')})"}
+    %h2.text-center= player[:player].name
+
+    %table
+        %thead
+            %tr
+                %th.no-border-left.no-border-top Franchise
+                %th.no-border-right.no-border-top All-Time
+        %tbody
+            %tr
+                - franchise_goals = player[:data][:franchise][:goals]
+                = render partial: 'player_rank_row', locals: { finder: franchise_goals, border_classes: 'no-border-left' }
+
+                - all_time_goals = player[:data][:all_time][:goals]
+                = render partial: 'player_rank_row', locals: { finder: all_time_goals, border_classes: 'no-border-right' }
+
+            %tr
+
+                - franchise_assists = player[:data][:franchise][:assists]
+                = render partial: 'player_rank_row', locals: { finder: franchise_assists, border_classes: 'no-border-left' }
+
+                - all_time_assists = player[:data][:all_time][:assists]
+                = render partial: 'player_rank_row', locals: { finder: all_time_assists, border_classes: 'no-border-right' }
+
+            %tr
+                - franchise_points = player[:data][:franchise][:points]
+                = render partial: 'player_rank_row', locals: { finder: franchise_points, border_classes: 'no-border-left no-border-bottom' }
+
+                - all_time_points = player[:data][:all_time][:points]
+                = render partial: 'player_rank_row', locals: { finder: all_time_points, border_classes: 'no-border-right no-border-bottom' }

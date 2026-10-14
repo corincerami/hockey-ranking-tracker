@@ -1,0 +1,27 @@
+- current_team = params['team'] || 'home'
+- other_team = current_team == 'away' ? 'home' : 'away'
+
+%header
+    %h1.text-center
+        %span
+            = image_tag "#{@game.away_team.code}.svg", alt: "#{@game.away_team.name} Logo", height: '100', width: '100', class: 'align-middle'
+        %span= @game.away_team.name
+        %span @
+        %span= @game.home_team.name
+        %span
+            = image_tag "#{@game.home_team.code}.svg", alt: "#{@game.home_team.name} Logo", height: '100', width: '100', class: 'align-middle'
+    %h2.text-center= @game.date.strftime('%B %-d, %Y')
+
+.game
+    %h1.text-center= @team.name
+    .text-center
+        = link_to "View #{other_team} team instead", game_path(@game, team: other_team)
+
+    .flex
+        %div.flex-75-md
+            .flex
+                - home_or_away = :"#{current_team}_team"
+                - @watcher[home_or_away][:data].each do |player|
+                    = render partial: 'player_ranks', locals: { player: }
+        %div.flex-25-md
+            %h3.text-center Goals in this game
