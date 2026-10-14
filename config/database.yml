@@ -88,6 +88,7 @@ production:
   primary: &primary_production
     <<: *default
     database: hockey_records_tracker_production
+    url: <%= ENV['DATABASE_URL'] %>
     username: hockey_records_tracker
     password: <%= ENV["HOCKEY_RECORDS_TRACKER_DATABASE_PASSWORD"] %>
   cache:
