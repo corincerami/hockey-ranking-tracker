@@ -101,8 +101,10 @@ def create_players_and_roster_spots(dataset, roster, game)
   end
 end
 
-Team.all.order(:code).each do |home_team|
-  puts "Seeding #{home_team.code}"
+teams = Team.all.order(:code)
+teams = teams.slice(ENV['SEED_INDEX'].to_i..) if ENV['SEED_INDEX'].present?
+teams.each do |home_team|
+  Rails.logger.info "Seeding #{home_team.code}"
   code = home_team.code == "UHC" ? "UTA" : home_team.code
   roster_seasons_uri = URI.parse("https://api-web.nhle.com/v1/roster-season/#{code}")
   roster_seasons_response = Net::HTTP.get_response(roster_seasons_uri)
@@ -112,7 +114,7 @@ Team.all.order(:code).each do |home_team|
   end
   roster_seasons_json.each do |season_name|
     formatted_name = "#{season_name.slice(0..3)}-#{season_name.slice(6..7)}"
-    puts "  #{formatted_name}"
+    Rails.logger.info "  #{formatted_name}"
     next if formatted_name == "2026-27"
     season = Season.find_by(name: formatted_name)
     team_season_uri = URI.parse("https://api-web.nhle.com/v1/club-schedule-season/#{code}/#{season_name}")
@@ -120,7 +122,7 @@ Team.all.order(:code).each do |home_team|
     JSON.parse(team_season_response.body)["games"].each do |game_data|
       next unless game_data["homeTeam"]["id"].to_s == home_team.external_id
       if [ 1, 2, 3 ].exclude? game_data['gameType']
-        puts "Game #{game_data['id']} has type #{game_data['gameType']}"
+        Rails.logger.info "Game #{game_data['id']} has type #{game_data['gameType']}"
       end
       next unless game_data["gameType"] == 2
 
