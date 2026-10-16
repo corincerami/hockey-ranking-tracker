@@ -4,7 +4,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = Game.find(params[:id])
+    @game = Game.includes(goals: [:team, :assists]).find(params[:id])
     @team = params["team"] == "away" ? @game.away_team : @game.home_team
     @watcher = GameWatcher.new(game: @game).call
   end

@@ -19,9 +19,27 @@
 
     .flex
         %div.flex-75-md
+            %h3.text-center Players
             .flex
                 - home_or_away = :"#{current_team}_team"
                 - @watcher[home_or_away][:data].each do |player|
                     = render partial: 'player_ranks', locals: { player: }
         %div.flex-25-md
             %h3.text-center Goals in this game
+            - @game.goals.sort_by { |goal| [goal.period, goal.time_in_period] }.each do |goal|
+                - primary_assist = goal.assists.find(&:primary?)
+                - secondary_assist = goal.assists.reject(&:primary?).first
+                .goal-card.text-center
+                    %div
+                        = image_tag "#{goal.team.code}.svg", alt: "#{@game.away_team.name} Logo", height: '50', width: '50', class: "align-middle"
+                    %div
+                        %div= "Period: #{goal.period}, Time: #{goal.time_in_period}"
+                        %div
+                            %strong= goal.player.name
+                        %div
+                            - if primary_assist
+                                = "Assists: "
+                                %strong= primary_assist.player.name
+                                - if secondary_assist
+                                    &
+                                    %strong= secondary_assist.player.name

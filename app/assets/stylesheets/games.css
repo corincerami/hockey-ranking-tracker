@@ -29,6 +29,13 @@ header {
     padding-bottom: 10px;
 }
 
+.goal-card {
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
 .grid {
     display: grid;
 }
@@ -78,16 +85,6 @@ header {
     border: none;
     padding: 0;
     vertical-align: middle;
-}
-
-.highlight {
-    background-color: #962117;
-    border-radius: 5px;
-    color: white;
-}
-
-.highlight .icon {
-    filter: invert(100%);
 }
 
 .player-rank-row {
