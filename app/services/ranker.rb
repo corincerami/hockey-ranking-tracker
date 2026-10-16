@@ -9,15 +9,20 @@ class Ranker
   def call
     delete_existing_ranks
     rank = 1
+    next_rank = nil
     players_by_count.each do |data|
       count, players = data
+      next_rank_rank = next_rank&.rank
+      to_next_rank = (next_rank.value - count) if next_rank
       players.each do |player|
-        Rank.create!(
+        next_rank = Rank.create!(
           rank:,
           value: count,
           player:,
           category:,
-          scope: scope
+          scope: scope,
+          next_rank: next_rank_rank,
+          to_next_rank:
         )
       end
       rank += players.length

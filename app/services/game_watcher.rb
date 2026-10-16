@@ -37,18 +37,18 @@ class GameWatcher
       team:,
       data: {
         all_time: {
-          goals: UpcomingRankFinder.new(player:, scope: nil, category: "goals"),
-          assists: UpcomingRankFinder.new(player:, scope: nil, category: "assists"),
-          points: UpcomingRankFinder.new(player:, scope: nil, category: "points")
+          goals: Rank.find_by(player:, scope: nil, category: "goals"),
+          assists: Rank.find_by(player:, scope: nil, category: "assists"),
+          points: Rank.find_by(player:, scope: nil, category: "points")
         },
         # team: {
         #   goals: UpcomingRankFinder.new(player:, scope: team, category: "goals"),
         #   assists: UpcomingRankFinder.new(player:, scope: team, category: "assists")
         # },
         franchise: {
-          goals: UpcomingRankFinder.new(player:, scope: team.franchise, category: "goals"),
-          assists: UpcomingRankFinder.new(player:, scope: team.franchise, category: "assists"),
-          points: UpcomingRankFinder.new(player:, scope: team.franchise, category: "points")
+          goals: Rank.find_by(player:, scope: team.franchise, category: "goals"),
+          assists: Rank.find_by(player:, scope: team.franchise, category: "assists"),
+          points: Rank.find_by(player:, scope: team.franchise, category: "points")
         }
       }
     }
@@ -56,12 +56,12 @@ class GameWatcher
 
   def highest_rank(data)
     [
-      data[:data][:franchise][:goals].current_rank&.rank.to_i,
-      data[:data][:all_time][:goals].current_rank&.rank.to_i,
-      data[:data][:franchise][:assists].current_rank&.rank.to_i,
-      data[:data][:all_time][:assists].current_rank&.rank.to_i,
-      data[:data][:franchise][:points].current_rank&.rank.to_i,
-      data[:data][:all_time][:points].current_rank&.rank.to_i
+      data[:data][:franchise][:goals].rank.to_i,
+      data[:data][:all_time][:goals].rank.to_i,
+      data[:data][:franchise][:assists].rank.to_i,
+      data[:data][:all_time][:assists].rank.to_i,
+      data[:data][:franchise][:points].rank.to_i,
+      data[:data][:all_time][:points].rank.to_i
     ].min # add other categories
   end
 end
