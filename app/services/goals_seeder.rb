@@ -73,6 +73,7 @@ class GoalsSeeder
 
   def empty_net?(goal_data)
     situation_code = goal_data["situationCode"]
+    return if situation_code.nil?
     if goal_data['isHome']
       situation_code[0] == '0'
     else
