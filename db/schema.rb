@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_16_192520) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_205254) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -32,6 +32,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_16_192520) do
     t.boolean "game_winning"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "x_on_x"
+    t.string "situation_code"
     t.index ["game_id"], name: "index_assists_on_game_id"
     t.index ["goal_id"], name: "index_assists_on_goal_id"
     t.index ["player_id"], name: "index_assists_on_player_id"
@@ -73,6 +75,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_16_192520) do
     t.boolean "game_winning"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "x_on_x"
+    t.string "situation_code"
     t.index ["game_id"], name: "index_goals_on_game_id"
     t.index ["player_id"], name: "index_goals_on_player_id"
     t.index ["team_id"], name: "index_goals_on_team_id"

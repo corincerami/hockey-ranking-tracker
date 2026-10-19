@@ -7,7 +7,7 @@ class GameSeeder
 
   def call
     create_players
-    create_goals
+    GoalsSeeder.new(game:).call
   end
 
   def home_team
@@ -136,49 +136,6 @@ class GameSeeder
       data["number"]
     elsif data["periodType"] == "OT"
       "OT#{data['number'] - 3}"
-    end
-  end
-
-  def create_goals
-    if game.date.past?
-      game.goals.delete_all
-      game.assists.delete_all
-      game_events_uri = URI.parse("https://api-web.nhle.com/v1/gamecenter/#{game.external_id}/play-by-play")
-      game_events_response = Net::HTTP.get_response(game_events_uri)
-      JSON.parse(game_events_response.body)["plays"].each do |event|
-        if event["typeDescKey"] === "goal" && event["periodDescriptor"]["periodType"] != "SO"
-          team = Team.find_by(external_id: event["details"]["eventOwnerTeamId"])
-          goal = Goal.create!(
-            game:,
-            player: Player.find_by(external_id: event["details"]["scoringPlayerId"]),
-            team:,
-            period: period_name(event["periodDescriptor"]),
-            time_in_period: event["timeInPeriod"]
-          )
-          if event["details"]["assist1PlayerId"].present?
-            Assist.create!(
-              game:,
-              goal:,
-              primary: true,
-              player: Player.find_by(external_id: event["details"]["assist1PlayerId"]),
-              team:,
-              period: period_name(event["periodDescriptor"]),
-              time_in_period: event["timeInPeriod"]
-            )
-          end
-          if event["details"]["assist2PlayerId"].present?
-            Assist.create!(
-              game:,
-              goal:,
-              primary: false,
-              player: Player.find_by(external_id: event["details"]["assist2PlayerId"]),
-              team:,
-              period: period_name(event["periodDescriptor"]),
-              time_in_period: event["timeInPeriod"]
-            )
-          end
-        end
-      end
     end
   end
 end

@@ -21,7 +21,7 @@ class GameWatcher
   end
 
   def team_players(team)
-    game.roster_spots.includes(:player).where(rosters: { team: }).map(&:player)
+    Player.joins(roster_spots: :roster).includes(:ranks).where(rosters: { team:, game: }).uniq
   end
 
   def upcoming_ranks(team)
@@ -37,18 +37,14 @@ class GameWatcher
       team:,
       data: {
         all_time: {
-          goals: Rank.find_by(player:, scope: nil, category: "goals"),
-          assists: Rank.find_by(player:, scope: nil, category: "assists"),
-          points: Rank.find_by(player:, scope: nil, category: "points")
+          goals: player.ranks.detect { |rank| rank.scope == nil && rank.category == "goals" },
+          assists: player.ranks.detect { |rank| rank.scope == nil && rank.category == "assists" },
+          points: player.ranks.detect { |rank| rank.scope == nil && rank.category == "points" }
         },
-        # team: {
-        #   goals: UpcomingRankFinder.new(player:, scope: team, category: "goals"),
-        #   assists: UpcomingRankFinder.new(player:, scope: team, category: "assists")
-        # },
         franchise: {
-          goals: Rank.find_by(player:, scope: team.franchise, category: "goals"),
-          assists: Rank.find_by(player:, scope: team.franchise, category: "assists"),
-          points: Rank.find_by(player:, scope: team.franchise, category: "points")
+          goals: player.ranks.detect { |rank| rank.scope_id == team.franchise_id && rank.category == "goals" },
+          assists: player.ranks.detect { |rank| rank.scope_id == team.franchise_id && rank.category == "assists" },
+          points: player.ranks.detect { |rank| rank.scope_id == team.franchise_id && rank.category == "points" }
         }
       }
     }

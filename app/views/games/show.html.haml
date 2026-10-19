@@ -1,5 +1,5 @@
 - current_team = params['team'] || 'home'
-- other_team = current_team == 'away' ? 'home' : 'away'
+- other_team = current_team == 'away' ? @game.home_team.name : @game.away_team.name
 
 %header
     %h1.text-center
@@ -15,7 +15,7 @@
 .game
     %h1.text-center= @team.name
     .text-center
-        = link_to "View #{other_team} team instead", game_path(@game, team: other_team)
+        = link_to "View #{other_team} instead", game_path(@game, team: other_team)
 
     .flex
         %div.flex-75-md

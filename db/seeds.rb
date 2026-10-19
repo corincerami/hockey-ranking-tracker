@@ -104,7 +104,7 @@ end
 teams = Team.all.order(:code)
 teams = teams.slice(ENV['SEED_INDEX'].to_i..) if ENV['SEED_INDEX'].present?
 teams.each do |home_team|
-  Rails.logger.info "Seeding #{home_team.code}"
+  puts "Seeding #{home_team.code}"
   code = home_team.code == "UHC" ? "UTA" : home_team.code
   roster_seasons_uri = URI.parse("https://api-web.nhle.com/v1/roster-season/#{code}")
   roster_seasons_response = Net::HTTP.get_response(roster_seasons_uri)
@@ -114,16 +114,14 @@ teams.each do |home_team|
   end
   roster_seasons_json.each do |season_name|
     formatted_name = "#{season_name.slice(0..3)}-#{season_name.slice(6..7)}"
-    Rails.logger.info "  #{formatted_name}"
+    percent = Goal.count.to_f / 397_000 * 100
+    puts "  #{formatted_name}, ~#{percent}% done seeding"
     next if formatted_name == "2026-27"
     season = Season.find_by(name: formatted_name)
     team_season_uri = URI.parse("https://api-web.nhle.com/v1/club-schedule-season/#{code}/#{season_name}")
     team_season_response = Net::HTTP.get_response(team_season_uri)
     JSON.parse(team_season_response.body)["games"].each do |game_data|
       next unless game_data["homeTeam"]["id"].to_s == home_team.external_id
-      if [ 1, 2, 3 ].exclude? game_data['gameType']
-        Rails.logger.info "Game #{game_data['id']} has type #{game_data['gameType']}"
-      end
       next unless game_data["gameType"] == 2
 
       away_team = Team.find_by(external_id: game_data["awayTeam"]["id"])
@@ -164,42 +162,7 @@ teams.each do |home_team|
       create_players_and_roster_spots(boxscore_json["playerByGameStats"]["homeTeam"]["defense"], home_roster, game)
       create_players_and_roster_spots(boxscore_json["playerByGameStats"]["homeTeam"]["goalies"], home_roster, game)
 
-      game_events_uri = URI.parse("https://api-web.nhle.com/v1/gamecenter/#{game.external_id}/play-by-play")
-      game_events_response = Net::HTTP.get_response(game_events_uri)
-      JSON.parse(game_events_response.body)["plays"].each do |event|
-        if event["typeDescKey"] === "goal" && event["periodDescriptor"]["periodType"] != "SO"
-          scoring_team = Team.find_by(external_id: event["details"]["eventOwnerTeamId"])
-          goal = Goal.find_or_create_by!(
-            game:,
-            player: Player.find_by(external_id: event["details"]["scoringPlayerId"]),
-            team: scoring_team,
-            period: period_name(event["periodDescriptor"]),
-            time_in_period: event["timeInPeriod"]
-          )
-          if event["details"]["assist1PlayerId"].present?
-            Assist.find_or_create_by!(
-              game:,
-              goal:,
-              primary: true,
-              player: Player.find_by(external_id: event["details"]["assist1PlayerId"]),
-              team: scoring_team,
-              period: period_name(event["periodDescriptor"]),
-              time_in_period: event["timeInPeriod"]
-            )
-          end
-          if event["details"]["assist2PlayerId"].present?
-            Assist.find_or_create_by(
-              game:,
-              goal:,
-              primary: false,
-              player: Player.find_by(external_id: event["details"]["assist2PlayerId"]),
-              team: scoring_team,
-              period: period_name(event["periodDescriptor"]),
-              time_in_period: event["timeInPeriod"]
-            )
-          end
-        end
-      end
+      GoalsSeeder.new(game:).call
     end
   end
 end
