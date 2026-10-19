@@ -61,6 +61,7 @@ class GoalsSeeder
 
   def x_on_x(goal_data)
     situation_code = goal_data["situationCode"]
+    return '' if situation_code.nil?
     home_players = situation_code[2].to_i
     away_players = situation_code[1].to_i
     if goal_data['isHome']
