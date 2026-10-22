@@ -1,0 +1,8 @@
+%h1= @player.name
+
+- situations = @player.goals.pluck(:x_on_x).uniq
+
+- binding.irb
+- situations.each do |situation|
+    - percent = @player.goals.select { |goal| goal.x_on_x == situation }.count.to_f / @player.goals.length * 100
+    %div= "#{situation}: #{percent}%"
