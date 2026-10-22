@@ -6,14 +6,14 @@ require_relative "config/application"
 Rails.application.load_tasks
 
 # 6 AM ET
-task :create_upcoming_games do
+task create_upcoming_games: [ :environment ] do
   (Date.today..1.week.from_now.to_date).each do |date|
     GamesByDateSeeder.new(date: date.to_s).call
   end
 end
 
 # 3 AM ET
-task :rank_finished_games do
+task rank_finished_games: [ :environment ] do
   GamesByDateSeeder.new(date: Date.yesterday.to_s).call
 
   Team.nhl.each do |team|
@@ -30,7 +30,7 @@ task :rank_finished_games do
 end
 
 # 6 AM ET
-task :schedule_games_for_today do
+task schedule_games_for_today: [ :environment ] do
   Game.today.each do |game|
     TrackGameJob.set(wait_until: game.date).perform_later(game.id)
   end
