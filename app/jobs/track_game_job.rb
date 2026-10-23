@@ -6,7 +6,7 @@ class TrackGameJob < ApplicationJob
     response = Net::HTTP.get_response(uri)
     game_data = JSON.parse(response.body)
 
-    GameSeeder.new(game_data).call
+    GameSeeder.new(game_data:).call
 
     if game_data["gameState"] == "LIVE"
       TrackGameJob.set(wait_until: 30.seconds.from_now).perform_later(game.id)
