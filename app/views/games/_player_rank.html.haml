@@ -7,7 +7,7 @@
         - if current_rank.value.zero?
             %span= "Waiting for his first #{current_rank.category.capitalize.singularize}"
         - else
-            %span= "#{current_rank.category.capitalize}: #{current_rank.value} (#{current_rank.rank.ordinalize})"
+            %span= "#{current_rank.value} (#{current_rank.rank.ordinalize})"
             - if current_rank.next_rank.present?
                 %span= "- #{current_rank.to_next_rank} to #{current_rank.next_rank.ordinalize}"
                 %span
