@@ -1,15 +1,18 @@
 - last ||= false
 - border_classes ||= ''
+- count_this_game ||= 0
+- highlight = stat_highlight(count_this_game, current_rank.to_next_rank)
 %td.player-rank-row{class: border_classes}
-    - if current_rank.value.zero?
-        %span= "Waiting for his first #{current_rank.category.capitalize.singularize}"
-    - else
-        %span= "#{current_rank.category.capitalize}: #{current_rank.value} (#{current_rank.rank.ordinalize})"
-        - if current_rank.next_rank.present?
-            %span= "#{current_rank.to_next_rank} from #{current_rank.next_rank.ordinalize}"
-            %span
-                %button{popovertarget: "other-players-#{current_rank.player_id}-#{current_rank.category}", class: 'popover-button'}
-                    = image_tag "info.png", width: 20, class: 'icon'
-            - next_ranks = Rank.includes(:player).where(scope: current_rank.scope, category: current_rank.category, rank: current_rank.next_rank)
-            - other_players = next_ranks&.length > 10 ? "#{next_ranks.length} other players" : next_ranks.map(&:player).map(&:name).join(', ')
-            %p{id: "other-players-#{current_rank.player_id}-#{current_rank.category}", class: 'popover', popover: 'hint'}= "#{next_ranks.first.rank.ordinalize} currently held by #{other_players}"
+    %div{class: highlight}
+        - if current_rank.value.zero?
+            %span= "Waiting for his first #{current_rank.category.capitalize.singularize}"
+        - else
+            %span= "#{current_rank.category.capitalize}: #{current_rank.value} (#{current_rank.rank.ordinalize})"
+            - if current_rank.next_rank.present?
+                %span= "- #{current_rank.to_next_rank} to #{current_rank.next_rank.ordinalize}"
+                %span
+                    %button{popovertarget: "other-players-#{current_rank.player_id}-#{current_rank.category}", class: 'popover-button'}
+                        = image_tag "info.png", width: 20, class: 'icon'
+                - next_ranks = Rank.includes(:player).where(scope: current_rank.scope, category: current_rank.category, rank: current_rank.next_rank)
+                - other_players = next_ranks&.length > 10 ? "#{next_ranks.length} other players" : next_ranks.map(&:player).map(&:name).join(', ')
+                %p{id: "other-players-#{current_rank.player_id}-#{current_rank.category}", class: 'popover', popover: 'hint'}= "#{next_ranks.first.rank.ordinalize} currently held by #{other_players}"

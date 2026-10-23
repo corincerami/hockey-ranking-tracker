@@ -1,5 +1,6 @@
 - current_team = params['team'] || 'home'
-- other_team = current_team == 'away' ? @game.home_team.name : @game.away_team.name
+- other_team = current_team == 'away' ? 'home' : 'away'
+- other_team_name = other_team == 'away' ? @game.away_team.name : @game.home_team.name
 
 %header
     %h1.text-center
@@ -15,7 +16,7 @@
 .game
     %h1.text-center= @team.name
     .text-center
-        = link_to "View #{other_team} instead", game_path(@game, team: other_team)
+        = link_to "View #{other_team_name} instead", game_path(@game, team: other_team)
 
     .flex
         %div.flex-75-md
@@ -24,12 +25,16 @@
                 - home_or_away = :"#{current_team}_team"
                 - @watcher[home_or_away][:data].each do |player|
                     = render partial: 'player_ranks', locals: { player: }
+                -# = render partial: 'table', locals: { data: @watcher[home_or_away][:data], scope: :franchise, category: :goals }
+                .text-center
+                    %p.highlight-progress Indicates player has made progress towards the next rank
+                    %p.highlight-rank-up Indicates player has reached the next rank
         %div.flex-25-md
             %h3.text-center Goals in this game
             - @game.goals.sort_by { |goal| [goal.period, goal.time_in_period] }.each do |goal|
                 - primary_assist = goal.assists.find(&:primary?)
                 - secondary_assist = goal.assists.reject(&:primary?).first
-                .goal-card.text-center
+                .goal-card.text-center{style: "background-image: url(#{image_url('ice.jpg')})"}
                     %div
                         = image_tag "#{goal.team.code}.svg", alt: "#{@game.away_team.name} Logo", height: '50', width: '50', class: "align-middle"
                     %div

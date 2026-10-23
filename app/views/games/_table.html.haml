@@ -1,0 +1,32 @@
+- data ||= []
+- scope ||= :franchise
+- category ||= :goals
+
+%table
+    %thead
+        %th
+        %th{colspan: 4} Franchise Goals
+    %thead
+        %th Player
+        %th= category.to_s.titleize
+        %th Rank
+        %th Chasing
+        %th This Game
+    %tbody
+        - data.each do |player|
+            - rank = player[:data][scope][category]
+            %tr
+                %td= player[:player].name
+                %td= rank.value
+                %td= rank.rank
+                %td
+                    - if rank.next_rank.present?
+                        %span= "#{rank.to_next_rank} from #{rank.next_rank.ordinalize}"
+                        %span
+                            %button{popovertarget: "other-players-#{rank.player_id}-#{rank.category}", class: 'popover-button'}
+                                = image_tag "info.png", width: 20, class: 'icon'
+                        - next_ranks = Rank.includes(:player).where(scope: rank.scope, category: rank.category, rank: rank.next_rank)
+                        - other_players = next_ranks&.length > 10 ? "#{next_ranks.length} other players" : next_ranks.map(&:player).map(&:name).join(', ')
+                        %p{id: "other-players-#{rank.player_id}-#{rank.category}", class: 'popover', popover: 'hint'}= "Chasing #{other_players}"
+                %td= stat_count_this_game(player: player[:player], game: @game, category: category)
+

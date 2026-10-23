@@ -1,30 +1,33 @@
-%div.player-card{style: "flex-grow: 1; background-image: url(#{image_url('ice.jpg')})"}
-    %h2.text-center= player[:player].name
+%div.player-card{style: "flex-grow: 1;"}
+    - goals_this_game = @game.goals.where(player_id: player[:player].id).count
+    - assists_this_game = @game.assists.where(player_id: player[:player].id).count
+    - points_this_game = goals_this_game + assists_this_game
 
+    %h2.text-center= stat_line_this_game(player: player[:player], goals_this_game:, assists_this_game:)
     %table
         %thead
             %tr
                 %th.no-border-left.no-border-top Franchise
-                %th.no-border-right.no-border-top All-Time
+                %th.no-border-right.no-border-top NHL
         %tbody
             %tr
                 - franchise_goals = player[:data][:franchise][:goals]
-                = render partial: 'player_rank', locals: { current_rank: franchise_goals, border_classes: 'no-border-left' }
+                = render partial: 'player_rank', locals: { current_rank: franchise_goals, border_classes: 'no-border-left', count_this_game: goals_this_game }
 
                 - all_time_goals = player[:data][:all_time][:goals]
-                = render partial: 'player_rank', locals: { current_rank: all_time_goals, border_classes: 'no-border-right' }
+                = render partial: 'player_rank', locals: { current_rank: all_time_goals, border_classes: 'no-border-right', count_this_game: goals_this_game  }
 
             %tr
 
                 - franchise_assists = player[:data][:franchise][:assists]
-                = render partial: 'player_rank', locals: { current_rank: franchise_assists, border_classes: 'no-border-left' }
+                = render partial: 'player_rank', locals: { current_rank: franchise_assists, border_classes: 'no-border-left', count_this_game: assists_this_game }
 
                 - all_time_assists = player[:data][:all_time][:assists]
-                = render partial: 'player_rank', locals: { current_rank: all_time_assists, border_classes: 'no-border-right' }
+                = render partial: 'player_rank', locals: { current_rank: all_time_assists, border_classes: 'no-border-right', count_this_game: assists_this_game }
 
             %tr
                 - franchise_points = player[:data][:franchise][:points]
-                = render partial: 'player_rank', locals: { current_rank: franchise_points, border_classes: 'no-border-left no-border-bottom' }
+                = render partial: 'player_rank', locals: { current_rank: franchise_points, border_classes: 'no-border-left no-border-bottom', count_this_game: points_this_game }
 
                 - all_time_points = player[:data][:all_time][:points]
-                = render partial: 'player_rank', locals: { current_rank: all_time_points, border_classes: 'no-border-right no-border-bottom' }
+                = render partial: 'player_rank', locals: { current_rank: all_time_points, border_classes: 'no-border-right no-border-bottom', count_this_game: points_this_game }
