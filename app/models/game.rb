@@ -9,6 +9,6 @@ class Game < ApplicationRecord
   has_many :assists, dependent: :destroy
 
   scope :today, -> {
-    where(date: Date.today.in_time_zone("Pacific Time (US & Canada)").beginning_of_day...Date.today.in_time_zone("Pacific Time (US & Canada)").end_of_day)
+    where(date: Date.today.beginning_of_day...Date.today.end_of_day)
   }
 end
