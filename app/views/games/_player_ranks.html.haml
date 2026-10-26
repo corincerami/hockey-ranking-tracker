@@ -21,7 +21,7 @@
                 = render partial: 'player_rank', locals: { current_rank: all_time_goals, border_classes: 'no-border-right', count_this_game: goals_this_game.to_i  }
 
             %tr
-                %td.no-border-left Asissts
+                %td.no-border-left Assists
 
                 - franchise_assists = player[:data][:franchise][:assists]
                 = render partial: 'player_rank', locals: { current_rank: franchise_assists, count_this_game: assists_this_game.to_i }
