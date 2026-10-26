@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   def index
+    @date = date
     @games = Game.where(date: (date.beginning_of_day + 5.hours)...(date.end_of_day + 5.hours))
   end
 
