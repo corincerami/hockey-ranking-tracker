@@ -19,7 +19,7 @@ header {
     border-bottom: 2px solid white;
 }
 
-.player-card {
+.player-card, .game-card {
     border: 2px solid white;
     border-radius: 10px;
     font-weight: bold;
@@ -60,6 +60,10 @@ header {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+}
+
+.flex-center {
+    align-items: center;
 }
 
 .flex-75-md {

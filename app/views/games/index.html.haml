@@ -1,3 +1,18 @@
-- @games.each do |game|
-    %div
-        = link_to "#{game.away_team.name} @ #{game.home_team.name}", game
+.text-center.flex
+    - @games.each do |game|
+        = link_to game do
+            %div.game-card
+                %div.flex.flex-center
+                    %span
+                        = image_tag "#{game.away_team.code}.svg", alt: "#{game.away_team.name} Logo", height: '100', width: '100', class: 'align-middle'
+                    %span
+                        %div
+                            %span= game.away_team.name
+                            %span @
+                            %span= game.home_team.name
+                        %div
+                            %span= game.date.to_time.strftime('%-I:%M %p PT')
+                            %span /
+                            %span= game.date.to_time.in_time_zone("Eastern Time (US & Canada)").strftime('%-I:%M %p ET')
+                    %span
+                        = image_tag "#{game.home_team.code}.svg", alt: "#{game.home_team.name} Logo", height: '100', width: '100', class: 'align-middle'
