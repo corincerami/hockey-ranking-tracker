@@ -1,8 +1,8 @@
 module GamesHelper
   def stat_highlight(count_this_game, to_next_rank)
-    if count_this_game >= to_next_rank
+    if to_next_rank && count_this_game >= to_next_rank
       "highlight-rank-up"
-    elsif count_this_game > 0
+    elsif to_next_rank && count_this_game > 0
       "highlight-progress"
     end
   end
