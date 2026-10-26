@@ -7,7 +7,7 @@ Rails.application.load_tasks
 
 # 6 AM ET
 task create_upcoming_games: [ :environment ] do
-  (Date.today..1.week.from_now.to_date).each do |date|
+  (Time.zone.now.to_date..1.week.from_now.to_date).each do |date|
     GamesByDateSeeder.new(date: date.to_s).call
   end
 end

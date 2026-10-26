@@ -4,7 +4,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = Game.includes(goals: [:team, :assists]).find(params[:id])
+    @game = Game.includes(goals: [ :team, :assists ]).find(params[:id])
     @team = params["team"] == "away" ? @game.away_team : @game.home_team
     @watcher = GameWatcher.new(game: @game).call
   end
@@ -12,6 +12,6 @@ class GamesController < ApplicationController
   private
 
   def date
-    params[:date].presence ? Date.parse(params[:date]) : Date.today
+    params[:date].presence ? Date.parse(params[:date]) : Time.zone.now.to_date
   end
 end

@@ -4,7 +4,7 @@ require "json"
 class GamesByDateSeeder
   attr_reader :date
 
-  def initialize(date: Date.today.to_s)
+  def initialize(date: Time.zone.now.to_date.to_s)
     @date = date
   end
 
