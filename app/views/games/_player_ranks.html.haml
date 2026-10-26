@@ -15,25 +15,25 @@
                 %td.no-border-left Goals
 
                 - franchise_goals = player[:data][:franchise][:goals]
-                = render partial: 'player_rank', locals: { current_rank: franchise_goals, count_this_game: goals_this_game }
+                = render partial: 'player_rank', locals: { current_rank: franchise_goals, count_this_game: goals_this_game.to_i }
 
                 - all_time_goals = player[:data][:all_time][:goals]
-                = render partial: 'player_rank', locals: { current_rank: all_time_goals, border_classes: 'no-border-right', count_this_game: goals_this_game  }
+                = render partial: 'player_rank', locals: { current_rank: all_time_goals, border_classes: 'no-border-right', count_this_game: goals_this_game.to_i  }
 
             %tr
                 %td.no-border-left Asissts
 
                 - franchise_assists = player[:data][:franchise][:assists]
-                = render partial: 'player_rank', locals: { current_rank: franchise_assists, count_this_game: assists_this_game }
+                = render partial: 'player_rank', locals: { current_rank: franchise_assists, count_this_game: assists_this_game.to_i }
 
                 - all_time_assists = player[:data][:all_time][:assists]
-                = render partial: 'player_rank', locals: { current_rank: all_time_assists, border_classes: 'no-border-right', count_this_game: assists_this_game }
+                = render partial: 'player_rank', locals: { current_rank: all_time_assists, border_classes: 'no-border-right', count_this_game: assists_this_game.to_i }
 
             %tr
                 %td.no-border-left.no-border-bottom Points
 
                 - franchise_points = player[:data][:franchise][:points]
-                = render partial: 'player_rank', locals: { current_rank: franchise_points, border_classes: 'no-border-bottom', count_this_game: points_this_game }
+                = render partial: 'player_rank', locals: { current_rank: franchise_points, border_classes: 'no-border-bottom', count_this_game: points_this_game.to_i }
 
                 - all_time_points = player[:data][:all_time][:points]
-                = render partial: 'player_rank', locals: { current_rank: all_time_points, border_classes: 'no-border-right no-border-bottom', count_this_game: points_this_game }
+                = render partial: 'player_rank', locals: { current_rank: all_time_points, border_classes: 'no-border-right no-border-bottom', count_this_game: points_this_game.to_i }
